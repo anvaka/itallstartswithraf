@@ -14,5 +14,11 @@
     "step"
   ],
   "author": "Andrei Kashcha",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "unrender": "git+https://github.com/anvaka/unrender.git"
+  },
+  "devDependencies": {
+    "browserify": "^10.2.4"
+  }
 }
