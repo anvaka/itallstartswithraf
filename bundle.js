@@ -6,7 +6,6 @@ var particles = require('./lib/createParticleObject.js')(particlesCount);
 var target = {x: 0, y: 0};
 
 document.body.addEventListener('mousemove', setNewTarget, true);
-document.body.addEventListener('mousedown', boom, true);
 
 frame();
 function frame() {
@@ -32,13 +31,6 @@ function renderParticles() {
 
 function setNewTarget(e) {
   target = particleView.getCoordinates(e.clientX, e.clientY);
-}
-
-function boom() {
-  for (var i = 0; i < particlesCount; ++i) {
-    var p = particles[i];
-    p.boom();
-  }
 }
 
 },{"./lib/createParticleObject.js":2,"./lib/createParticleView.js":3}],2:[function(require,module,exports){
@@ -104,13 +96,6 @@ Particle.prototype.moveTo = function(x, y) {
   this.y += this.dy;
   this.dx *= .95;
   this.dy *= .95;
-}
-
-Particle.prototype.boom = function() {
-  var angle = Math.random() * Math.PI * 2;
-  var r = Math.random() * 100 - ( 100 / 2 );
-  this.dx = r * Math.cos( angle );
-  this.dy = r * Math.sin( angle );
 }
 
 },{}],5:[function(require,module,exports){
