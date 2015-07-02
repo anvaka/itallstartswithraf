@@ -3,11 +3,6 @@ var particlesCount = 1000;
 var particleView = require('./lib/createParticleView.js')(particlesCount);
 var particles = require('./lib/createParticleObject.js')(particlesCount);
 
-var target = {x: 0, y: 0};
-
-document.body.addEventListener('mousemove', setNewTarget, true);
-document.body.addEventListener('mousedown', boom, true);
-
 frame();
 function frame() {
   requestAnimationFrame(frame);
@@ -20,8 +15,6 @@ function renderParticles() {
   for (var i = 0; i < particlesCount; ++i) {
     var p = particles[i];
 
-    p.moveTo(target.x, target.y);
-
     coordinates[i * 3] = p.x;
     coordinates[i * 3 + 1] = p.y;
     coordinates[i * 3 + 2] = 0;
@@ -30,19 +23,9 @@ function renderParticles() {
   particleView.coordinates(coordinates);
 }
 
-function setNewTarget(e) {
-  target = particleView.getCoordinates(e.clientX, e.clientY);
-}
-
-function boom() {
-  for (var i = 0; i < particlesCount; ++i) {
-    var p = particles[i];
-    p.boom();
-  }
-}
-
 },{"./lib/createParticleObject.js":2,"./lib/createParticleView.js":3}],2:[function(require,module,exports){
 var Particle = require('./particle.js');
+
 module.exports = createParticleObject;
 
 function createParticleObject(count) {
@@ -94,23 +77,6 @@ function Particle() {
   this.y = Math.random() * 1000 - 500;
   this.dx = 0;
   this.dy = 0;
-}
-
-Particle.prototype.moveTo = function(x, y) {
-  var angle = Math.atan2( this.y - y, this.x - x );
-  this.dx -= Math.cos( angle );
-  this.dy -= Math.sin( angle );
-  this.x += this.dx;
-  this.y += this.dy;
-  this.dx *= .95;
-  this.dy *= .95;
-}
-
-Particle.prototype.boom = function() {
-  var angle = Math.random() * Math.PI * 2;
-  var r = Math.random() * 100 - ( 100 / 2 );
-  this.dx = r * Math.cos( angle );
-  this.dy = r * Math.sin( angle );
 }
 
 },{}],5:[function(require,module,exports){
