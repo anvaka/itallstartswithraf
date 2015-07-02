@@ -16,6 +16,8 @@
   "author": "Andrei Kashcha",
   "license": "MIT",
   "dependencies": {
+    "three.randompoints": "^1.0.0",
+    "three.regular.helvetiker": "^1.0.0",
     "unrender": "git+https://github.com/anvaka/unrender.git"
   },
   "devDependencies": {
