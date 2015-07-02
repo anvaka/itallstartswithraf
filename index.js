@@ -5,7 +5,6 @@ var particles = require('./lib/createParticleObject.js')(particlesCount);
 var target = {x: 0, y: 0};
 
 document.body.addEventListener('mousemove', setNewTarget, true);
-document.body.addEventListener('mousedown', boom, true);
 
 frame();
 function frame() {
@@ -31,11 +30,4 @@ function renderParticles() {
 
 function setNewTarget(e) {
   target = particleView.getCoordinates(e.clientX, e.clientY);
-}
-
-function boom() {
-  for (var i = 0; i < particlesCount; ++i) {
-    var p = particles[i];
-    p.boom();
-  }
 }
