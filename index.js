@@ -6,7 +6,7 @@ var target = {x: 0, y: 0};
 
 document.body.addEventListener('mousemove', setNewTarget, true);
 
-frame();
+requestAnimationFrame(frame);
 function frame() {
   requestAnimationFrame(frame);
   renderParticles();
