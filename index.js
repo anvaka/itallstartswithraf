@@ -2,7 +2,7 @@ var particlesCount = 1000;
 var particleView = require('./lib/createParticleView.js')(particlesCount);
 var particles = require('./lib/createParticleObject.js')(particlesCount);
 
-frame();
+requestAnimationFrame(frame);
 function frame() {
   requestAnimationFrame(frame);
   renderParticles();
