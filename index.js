@@ -3,7 +3,6 @@ var particlesCount = 100;
 var particleView = createParticleView(particlesCount);
 
 requestAnimationFrame(frame);
-
 function frame() {
   requestAnimationFrame(frame);
   renderParticles();
