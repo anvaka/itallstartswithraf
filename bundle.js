@@ -5,7 +5,7 @@ var particles = require('./lib/createParticleObject.js')(particlesCount);
 
 var target = {x: 0, y: 0};
 
-document.body.addEventListener('mousemove', setNewTarget, true);
+document.body.addEventListener('mousemove', setNewTarget);
 
 requestAnimationFrame(frame);
 function frame() {
@@ -145,7 +145,7 @@ function unrender(container, options) {
   var autoPilot = createAutoPilot(camera);
 
   // TODO: This doesn't seem to belong here... Not sure where to put it
-  var hitTest = createHitTest(particleView, container);
+  var hitTest = createHitTest(particleView, container, input);
   var updateTween = window.performance ? highResTimer : dateTimer;
 
   startEventsListening();
@@ -190,7 +190,7 @@ function unrender(container, options) {
     particleView.initWithNewCoordinates(coordinates);
 
     if (hitTest) hitTest.destroy();
-    hitTest = createHitTest(particleView, container);
+    hitTest = createHitTest(particleView, container, input);
 
     return api;
   }
@@ -378,7 +378,7 @@ var createOctree = require('yaot');
 
 module.exports = createHitTest;
 
-function createHitTest(particleView, domElement) {
+function createHitTest(particleView, domElement, inputController) {
   if (!particleView) {
     throw new Error('hit-test cannot work without particle view');
   }
@@ -494,6 +494,7 @@ function createHitTest(particleView, domElement) {
 
     domMouse.x = e.clientX;
     domMouse.y = e.clientY;
+
     noInteraction = false;
     scheduleInteractionReset();
   }
@@ -510,8 +511,11 @@ function createHitTest(particleView, domElement) {
 
   function update(scene, camera) {
     // We need to stop processing any events until user moves mouse.
-    // this is to avoid race conditions between search field and scene
     if (noInteraction) return;
+
+    // We can provide much faster interface if we not check hit tests
+    // when user moves around:
+    if (inputController.isMoving()) return;
 
     var pointCloud = particleView.getPointCloud();
     if (!pointCloud) return;
@@ -947,6 +951,11 @@ function fly(camera, domElement, THREE) {
     update: update,
 
     /**
+     * Returns true if we are moving camera at the moment
+     */
+    isMoving: isMoving,
+
+    /**
      * Releases all event handlers
      */
     destroy: destroy,
@@ -998,6 +1007,21 @@ function fly(camera, domElement, THREE) {
   updateRotationVector();
 
   return api;
+
+  function isMoving() {
+    return moveState.up
+            || moveState.down
+            || moveState.left
+            || moveState.right
+            || moveState.forward
+            || moveState.back
+            || moveState.pitchUp
+            || moveState.pitchDown
+            || moveState.yawLeft
+            || moveState.yawRight
+            || moveState.rollLeft
+            || moveState.rollRight;
+  }
 
   function toggleDragToLook() {
     api.dragToLook = !api.dragToLook;
@@ -1098,7 +1122,7 @@ function fly(camera, domElement, THREE) {
 
   function mouseup(event) {
     event.preventDefault();
-    //event.stopPropagation();
+
     if (isMouseDown) {
       document.removeEventListener('mouseup', mouseup);
       isMouseDown = false;
