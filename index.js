@@ -4,7 +4,7 @@ var particles = require('./lib/createParticleObject.js')(particlesCount);
 
 var target = {x: 0, y: 0};
 
-document.body.addEventListener('mousemove', setNewTarget, true);
+document.body.addEventListener('mousemove', setNewTarget);
 
 requestAnimationFrame(frame);
 function frame() {
